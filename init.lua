@@ -161,7 +161,7 @@ vim.opt.scrolloff = 10
 --  See `:help vim.keymap.set()`
 
 -- Clear highlights on search when pressing <Esc> in normal mode
---  See `:help hlsearch`
+--  See `:help hlsearch` vim.cmd [[autocmd FileType markdown set tw=80 wrap]]
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
@@ -201,6 +201,27 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+-- Markdown Formatting wrapping text
+vim.opt.formatoptions = 'jcroqlnt'
+vim.opt.textwidth = 80
+
+-- autocmds
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  pattern = { '*.md' },
+  callback = function()
+    vim.opt.colorcolumn = '80'
+    vim.opt.textwidth = 80
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
+  pattern = { '*.md' },
+  callback = function()
+    vim.opt.colorcolumn = '120'
+    vim.opt.textwidth = 120
   end,
 })
 
